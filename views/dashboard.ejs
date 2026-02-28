@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <div class="max-w-6xl mx-auto px-4 py-12">
+        <header class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+            <div class="flex items-center gap-4 w-full md:w-auto">
+                <form action="/" method="GET"
+                    class="flex flex-1 bg-white border border-gray-200 rounded-full px-4 py-2 shadow-sm focus-within:ring-2 focus-within:ring-black transition">
+                    <input type="text" name="search" value="<%= search %>"
+                        placeholder="Search by name, email or phone..."
+                        class="bg-transparent outline-none text-sm w-full md:w-64">
+                    <button type="submit" class="text-gray-400 hover:text-black ml-2">
+                        <i class="ri-search-line"></i>
+                    </button>
+                </form>
+                <a href="/add"
+                    class="bg-black text-white px-6 py-2 rounded-full text-sm hover:bg-gray-800 transition shrink-0">
+                    + New Entry
+                </a>
+            </div>
+        </header>
+
+        <form action="/multipleDelete" method="POST" id="bulkForm">
+            <div class="mb-4 flex justify-end">
+                <button type="submit"
+                    class="text-xs font-semibold text-red-500 hover:text-red-700 flex items-center gap-1 transition">
+                    <i class="ri-delete-bin-7-line"></i> DELETE SELECTED
+                </button>
+            </div>
+
+            <div class="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50 border-b border-gray-100">
+                        <tr>
+                            <th class="px-6 py-4 w-12 text-center">
+                                <input type="checkbox" id="selectAll" class="w-4 h-4 accent-black cursor-pointer">
+                            </th>
+                            <th class="px-6 py-4 text-xs font-medium uppercase text-gray-500">User</th>
+                            <th class="px-6 py-4 text-xs font-medium uppercase text-gray-500">Contact</th>
+                            <th class="px-6 py-4 text-xs font-medium uppercase text-gray-500">Status</th>
+                            <th class="px-6 py-4 text-xs font-medium uppercase text-gray-500 text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        <% if(data.length> 0) { %>
+                            <% data.forEach(item=> { %>
+                                <tr class="hover:bg-gray-50/50 transition">
+                                    <td class="px-6 py-4 text-center">
+                                        <input type="checkbox" name="ids[]" value="<%= item._id %>"
+                                            class="rowCheckbox w-4 h-4 accent-black cursor-pointer">
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <img src="<%= item.image %>"
+                                                class="w-10 h-10 rounded-full object-cover border border-gray-100">
+                                            <span class="font-medium text-sm">
+                                                <%= item.name %>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">
+                                        <div>
+                                            <%= item.email %>
+                                        </div>
+                                        <div class="text-xs opacity-50">
+                                            <%= item.phone %>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span
+                                            class="inline-block px-2 py-1 text-[10px] rounded border border-green-200 text-green-600 bg-green-50">
+                                            ACTIVE
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="flex justify-end gap-1">
+                                            <a href="/editUser/<%= item._id %>"
+                                                class="p-2 text-gray-400 hover:text-black hover:bg-gray-100 rounded-lg transition">
+                                                <i class="ri-pencil-line text-lg"></i>
+                                            </a>
+                                            <a href="/delete?id=<%= item._id %>"
+                                                onclick="return confirm('Delete this record?')"
+                                                class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
+                                                <i class="ri-delete-bin-line text-lg"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="5" class="px-6 py-20 text-center text-gray-400 text-sm italic">
+                                                No records found matching your search.
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+
+        <div class="mt-8 flex flex-col items-center gap-4">
+            <div class="flex items-center gap-2">
+                <% if (currentPage> 1) { %>
+                    <a href="/?page=<%= currentPage - 1 %>&search=<%= search %>"
+                        class="px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm hover:bg-gray-50 transition">
+                        <i class="ri-arrow-left-s-line align-middle"></i> Previous
+                    </a>
+                    <% } else { %>
+                        <button disabled
+                            class="px-4 py-2 bg-gray-50 border border-gray-100 rounded-xl text-sm text-gray-300 cursor-not-allowed">
+                            <i class="ri-arrow-left-s-line align-middle"></i> Previous
+                        </button>
+                        <% } %>
+
+                            <div class="px-4 py-2 text-sm font-medium bg-white border border-gray-200 rounded-xl">
+                                <%= currentPage %> / <%= totalPages || 1 %>
+                            </div>
+
+                            <% if (currentPage < totalPages) { %>
+                                <a href="/?page=<%= currentPage + 1 %>&search=<%= search %>"
+                                    class="px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm hover:bg-gray-50 transition">
+                                    Next <i class="ri-arrow-right-s-line align-middle"></i>
+                                </a>
+                                <% } else { %>
+                                    <button disabled
+                                        class="px-4 py-2 bg-gray-50 border border-gray-100 rounded-xl text-sm text-gray-300 cursor-not-allowed">
+                                        Next <i class="ri-arrow-right-s-line align-middle"></i>
+                                    </button>
+                                    <% } %>
+            </div>
+            <p class="text-xs text-gray-400">Showing page <%= currentPage %> of <%= totalPages || 1 %>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const selectAll = document.getElementById('selectAll');
+        const rowCheckboxes = document.querySelectorAll('.rowCheckbox');
+
+        if (selectAll) {
+            selectAll.addEventListener('change', function () {
+                rowCheckboxes.forEach(checkbox => {
+                    checkbox.checked = selectAll.checked;
+                });
+            });
+        }
+
+        rowCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                const checkedCount = document.querySelectorAll('.rowCheckbox:checked').length;
+                selectAll.checked = (checkedCount === rowCheckboxes.length);
+                selectAll.indeterminate = (checkedCount > 0 && checkedCount < rowCheckboxes.length);
+            });
+        });
+    </script>

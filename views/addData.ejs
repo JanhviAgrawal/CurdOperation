@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Record</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 text-gray-900 font-sans h-screen flex items-center justify-center">
+    <div class="w-full max-w-md p-8 bg-white border border-gray-100 rounded-3xl shadow-sm">
+        <div class="mb-8 text-center">
+            <h2 class="text-xl font-medium">Create Record</h2>
+            <p class="text-sm text-gray-400">Fill in the user details below.</p>
+        </div>
+
+        <form action="/add" method="POST" enctype="multipart/form-data" class="space-y-5">
+            <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">Full Name</label>
+                <input type="text" name="name" required
+                    class="w-full px-4 py-2 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-black transition outline-none"
+                    placeholder="Name here">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-medium text-gray-500 mb-1">Email</label>
+                    <input type="email" name="email" required
+                        class="w-full px-4 py-2 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-black outline-none"
+                        placeholder="email here">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-500 mb-1">Phone</label>
+                    <input type="text" name="phone" required
+                        class="w-full px-4 py-2 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-black outline-none"
+                        placeholder="number here">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">Profile Image</label>
+                <input type="file" name="image" required
+                    class="w-full px-4 py-2 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-black outline-none">
+            </div>
+
+            <div class="pt-4 flex gap-3">
+                <a href="/" class="flex-1 text-center py-2 text-sm text-gray-500 hover:text-black transition">Cancel</a>
+                <button type="submit"
+                    class="flex-1 bg-black text-white py-2 rounded-xl text-sm hover:bg-gray-800 transition">Save
+                    Record</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
